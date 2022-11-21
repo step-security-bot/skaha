@@ -15,6 +15,7 @@ toml = "^0.10.2"
 mkdocs-material = {version = "^7.3.6", optional = true}
 mkdocstrings = {version = "^0.16.2", optional = true}
 beartype = "^0.9.1"
+pydantic = "^1.10.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
