@@ -69,7 +69,7 @@ class Sessions(SkahaClient):
         if view:
             params["view"] = view
         log.debug(params)
-        response = self.get(url=self.server, params=params)
+        response = self.session.get(url=self.server, params=params)
         response.raise_for_status()
         return response.json()
 
@@ -93,7 +93,7 @@ class Sessions(SkahaClient):
             )
 
         loop = get_event_loop()
-        responses = loop.run_until_complete(scale(self.get, arguments))
+        responses = loop.run_until_complete(scale(self.session.get, arguments))
         results: Dict[str, Any] = {}
         for index, response in enumerate(responses):
             results[ids[index]] = response.text
@@ -118,7 +118,7 @@ class Sessions(SkahaClient):
                 {"url": self.server + "/" + id, "params": {"view": "logs"}}
             )
         loop = get_event_loop()
-        responses = loop.run_until_complete(scale(self.get, arguments))
+        responses = loop.run_until_complete(scale(self.session.get, arguments))
         results: Dict[str, Any] = {}
         for index, response in enumerate(responses):
             results[ids[index]] = response.text.split("\n")

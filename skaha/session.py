@@ -53,7 +53,7 @@ class Session(SkahaClient):
         if view:
             params["view"] = view
         log.debug(params)
-        response = self.get(url=self.server, params=params)
+        response = self.session.get(url=self.server, params=params)
         response.raise_for_status()
         return response.json()
 
@@ -70,7 +70,7 @@ class Session(SkahaClient):
             >>> session.info(id="hjko98yghj")
 
         """
-        response = self.get(url=self.server + "/" + id, params={"view": "event"})
+        response = self.session.get(url=self.server + "/" + id, params={"view": "event"})
         response.raise_for_status()
         return response.text
 
@@ -87,7 +87,7 @@ class Session(SkahaClient):
             >>> session.logs(id="hjko98yghj")
 
         """
-        response = self.get(url=self.server + "/" + id, params={"view": "logs"})
+        response = self.session.get(url=self.server + "/" + id, params={"view": "logs"})
         response.raise_for_status()
         return response.text.split("\n")
 

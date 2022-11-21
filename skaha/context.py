@@ -27,4 +27,4 @@ class Context(SkahaClient):
                  ...}
 
         """
-        return self.get(url=self.server).json()
+        return self.session.get(url=self.server).json()

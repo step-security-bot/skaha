@@ -44,7 +44,7 @@ class Images(SkahaClient):
         data: dict = {}
         if kind:
             data["type"] = kind
-        response = self.get(url=self.server, params=data).json()
+        response = self.session.get(url=self.server, params=data).json()
         if prune:
             for index, image in enumerate(response):
                 response[index] = image["id"]
