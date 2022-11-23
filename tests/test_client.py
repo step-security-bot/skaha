@@ -3,7 +3,7 @@
 import pytest
 import requests
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from skaha.client import SkahaClient
 from skaha.exceptions import InvalidCertificateError, InvalidServerURL
 

@@ -7,7 +7,7 @@ from time import asctime, gmtime
 from requests import Session
 from validators import url
 from typing import Optional, Type
-from pydantic import BaseModel, Field, validator, root_validator
+from pydantic import BaseModel, Field, validator, root_validator, AnyHttpUrl
 
 from skaha import __version__
 from skaha.exceptions import InvalidCertificateError, InvalidServerURL
@@ -31,10 +31,13 @@ class SkahaClient(BaseModel):
 
     """
 
-    server: str = Field(default="https://ws-uv.canfar.net/skaha", title="Server URL")
+    server: AnyHttpUrl = Field(
+        default="https://ws-uv.canfar.net/skaha", title="Server URL", type=AnyHttpUrl
+    )
     certificate: str = Field(
-        default="{HOME}/.ssl/cadcproxy.pem".format(HOME=environ["HOME"]), type=str,
-        title="Certificate File"
+        default="{HOME}/.ssl/cadcproxy.pem".format(HOME=environ["HOME"]),
+        type=str,
+        title="Certificate File",
     )
     timeout: int = Field(default=15, title="Timeout")
     session: Type[Session] = Field(default=Session())
@@ -71,7 +74,7 @@ class SkahaClient(BaseModel):
         values["verify"] = True
         return values
 
-    @validator("server")
+    @validator("server", pre=True)
     def server_has_valid_url(cls, value, values):
         """Check if server is a valid url."""
         if not url(value):
