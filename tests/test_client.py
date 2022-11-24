@@ -34,10 +34,25 @@ def test_client_session():
     assert any(list(map(lambda h: h in client.session.headers.keys(), headers)))
 
 
-def test_bad_server():
-    """Test bad server."""
+def test_bad_server_no_schema():
+    """Test server URL without schema."""
     with pytest.raises(InvalidServerURL):
-        SkahaClient(server="abcdefd")
+        SkahaClient(server="ws-uv.canfar.net")
+
+
+def test_bad_server_no_host():
+    """Test server URL without proper host."""
+    with pytest.raises(InvalidServerURL):
+        SkahaClient(server="https:///ea")
+
+
+def test_default_certificate():
+    """Test validation with default certificate value."""
+    try:
+        SkahaClient()
+    except ValidationError:
+        assert False
+    assert True
 
 
 def test_bad_certificate():

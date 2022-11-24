@@ -1,5 +1,5 @@
 """Skaha Client."""
-from os import environ
+from os import environ, access, R_OK
 from pathlib import Path
 from platform import machine, platform, python_version, release, system
 from time import asctime, gmtime
@@ -7,13 +7,21 @@ from time import asctime, gmtime
 from requests import Session
 from validators import url
 from typing import Optional, Type
-from pydantic import BaseModel, Field, validator, root_validator, AnyHttpUrl
+from pydantic import (
+    BaseModel,
+    Field,
+    validator,
+    root_validator,
+    AnyHttpUrl,
+    FilePath,
+    ValidationError,
+)
+from pydantic.tools import parse_obj_as
 
 from skaha import __version__
 from skaha.exceptions import InvalidCertificateError, InvalidServerURL
 
 
-# @attrs
 class SkahaClient(BaseModel):
     """SkahaClient is the base class for all other API clients.
 
@@ -34,7 +42,7 @@ class SkahaClient(BaseModel):
     server: AnyHttpUrl = Field(
         default="https://ws-uv.canfar.net/skaha", title="Server URL", type=AnyHttpUrl
     )
-    certificate: str = Field(
+    certificate: FilePath = Field(
         default="{HOME}/.ssl/cadcproxy.pem".format(HOME=environ["HOME"]),
         type=str,
         title="Certificate File",
@@ -44,7 +52,33 @@ class SkahaClient(BaseModel):
     cert: Optional[str] = Field(default="")
     verify: Optional[bool] = Field(default=False)
 
-    @root_validator
+    @validator("server", pre=True, always=True)
+    def server_has_valid_url(cls, value):
+        """Check if server is a valid url."""
+        error = None
+        try:
+            value = parse_obj_as(AnyHttpUrl, value)
+        except ValidationError as e:
+            error = e
+        if error:
+            raise InvalidServerURL(f"Server must be a valid URL.")
+        return value
+
+    @validator("certificate", pre=True, always=True)
+    def certificate_exists_and_is_readable(cls, value):
+        """Check the certificate."""
+        error = None
+        try:
+            value = parse_obj_as(FilePath, value)
+        except ValidationError as e:
+            error = e
+        if error:
+            raise InvalidCertificateError(
+                f"Certificate an absolute path and a readable file."
+            )
+        return value
+
+    @root_validator(skip_on_failure=True)
     def session_set_headers(cls, values):
         """Set headers to session object after all values has been obtained."""
         values["session"].headers.update({"X-Skaha-Server": values["server"]})
@@ -62,21 +96,10 @@ class SkahaClient(BaseModel):
         values["session"].headers.update({"X-Skaha-Client-Platform": platform()})
         return values
 
-    @root_validator
-    def certificate_is_valid(cls, values):
+    @root_validator(skip_on_failure=True)
+    def assign_cert_values(cls, values):
         """Check the certificate."""
-        if not Path(values["certificate"]).is_absolute():
-            raise InvalidCertificateError("certificate must be an absolute path.")
-        if not Path(values["certificate"]).is_file():
-            raise InvalidCertificateError(f"{values['certificate']} does not exist.")
         values["session"].headers.update({"X-Skaha-Authentication-Type": "certificate"})
         values["cert"] = values["certificate"]
         values["verify"] = True
         return values
-
-    @validator("server", pre=True)
-    def server_has_valid_url(cls, value, values):
-        """Check if server is a valid url."""
-        if not url(value):
-            raise InvalidServerURL("Server must be a valid URL.")
-        return value
