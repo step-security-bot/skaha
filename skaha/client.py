@@ -1,11 +1,10 @@
 """Skaha Client."""
-from os import environ, access, R_OK
+from os import environ
 from pathlib import Path
 from platform import machine, platform, python_version, release, system
 from time import asctime, gmtime
 
 from requests import Session
-from validators import url
 from typing import Optional, Type
 from pydantic import (
     BaseModel,
