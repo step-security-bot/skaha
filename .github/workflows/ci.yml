@@ -45,11 +45,8 @@ jobs:
           uv sync --all-extras --dev
       -
         name: Run tests
-        env:
-          CADC_USERNAME: ${{ secrets.CADC_USERNAME }}
-          CADC_PASSWORD: ${{ secrets.CADC_PASSWORD }}
         run: |
-          uv run cadc-get-cert --user ${{ env.CADC_USERNAME }} --password ${{ env.CADC_PASSWORD }} --days-valid 1
+          uv run cadc-get-cert --user ${{ secrets.CANFAR_USERNAME }} --password ${{ secrets.CANFAR_PASSWORD }} --days-valid 1
           uv run pytest tests --cov --cov-report=xml --junitxml=junit.xml -o junit_family=legacy
       -
         name: Upload coverage to Codecov
