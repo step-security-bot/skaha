@@ -7,13 +7,13 @@ from typing import Any, Callable, Dict, List
 
 
 async def scale(
-    function: Callable[[Any, Any], Any],
-    arguments: List[Dict[Any, Any]] = [{}],
+    function: Callable[..., Any],
+    arguments: List[Dict[Any, Any]],
 ) -> List[Any]:
     """Scales a function across multiple arguments.
 
     Args:
-        function (Callable): The function to be scaled.
+        function (Callable[..., Any]): The function to be scaled.
         arguments (List[Dict[Any, Any]], optional): The arguments to be passed to each
             function, by default [{}]
 

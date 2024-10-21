@@ -9,7 +9,7 @@ from requests.models import Response
 from typing_extensions import Self
 
 from skaha.client import SkahaClient
-from skaha.models import ContainerRegistry, CreateSpec, FetchSpec
+from skaha.models import CreateSpec, FetchSpec
 from skaha.utils import convert, logs
 from skaha.utils.threaded import scale
 
@@ -19,15 +19,21 @@ log = logs.get_logger(__name__)
 class Session(SkahaClient):
     """Skaha Session Management Client.
 
-    Args:
-        SkahaClient (SkahaClient): Base HTTP client.
+    This class provides methods to manage sessions in the Skaha system,
+    including fetching session details, creating new sessions,
+    retrieving logs, and destroying existing sessions.
 
-    Returns:
-        Session: Skaha Session Management Client.
+    Attributes:
+        server (str): The server URL for the Skaha API.
+        version (str): The version of the Skaha API being used.
+        session (requests.Session): The HTTP session used for making requests.
+
+    Args:
+        SkahaClient (SkahaClient): Base HTTP client for making API requests.
     """
 
     @model_validator(mode="after")
-    def set_server(self) -> Self:
+    def _set_server(self) -> Self:
         """Sets the server path after validation."""
         suffix = "session"
         self.server = f"{self.server}/{self.version}/{suffix}"  # type: ignore
@@ -86,7 +92,7 @@ class Session(SkahaClient):
         parameters = spec.model_dump(exclude_none=True)
         log.debug(parameters)
         response: Response = self.session.get(url=self.server, params=parameters)  # type: ignore # noqa: E501
-        response.raise_for_status()  # type: ignore # noqa: E501
+        response.raise_for_status()
         return response.json()
 
     def stats(self) -> Dict[str, Any]:
@@ -142,7 +148,7 @@ class Session(SkahaClient):
                 log.error(err)
         return responses
 
-    def logs(self, id: Union[List[str], str]) -> Dict[str, str]:
+    def logs(self, ids: Union[List[str], str]) -> Dict[str, str]:
         """Get logs from a session[s].
 
         Args:
@@ -155,16 +161,16 @@ class Session(SkahaClient):
             >>> session.logs(id="hjko98yghj")
             >>> session.logs(id=["hjko98yghj", "ikvp1jtp"])
         """
-        if isinstance(id, str):
-            id = [id]
+        if isinstance(ids, str):
+            ids = [ids]
         parameters: Dict[str, str] = {"view": "logs"}
         arguments: List[Any] = []
-        for value in id:
+        for value in ids:
             arguments.append({"url": f"{self.server}/{value}", "params": parameters})
         loop = get_event_loop()
         results = loop.run_until_complete(scale(self.session.get, arguments))
         responses: Dict[str, str] = {}
-        for index, identity in enumerate(id):
+        for index, identity in enumerate(ids):
             responses[identity] = ""
             try:
                 results[index].raise_for_status()
@@ -183,9 +189,8 @@ class Session(SkahaClient):
         gpu: Optional[int] = None,
         cmd: Optional[str] = None,
         args: Optional[str] = None,
-        env: Dict[str, Any] = {},
+        env: Optional[Dict[str, Any]] = None,
         replicas: int = 1,
-        registry: Optional[ContainerRegistry] = None,
     ) -> List[str]:
         """Launch a skaha session.
 
@@ -238,7 +243,7 @@ class Session(SkahaClient):
             replicas=replicas,
         )
         data: Dict[str, Any] = specification.model_dump(exclude_none=True)
-        log.info(f"Creating {replicas} session(s) with parameters:")
+        log.info("Creating %d session(s) with parameters:", replicas)
         log.info(data)
         payload: List[Tuple[str, Any]] = []
         arguments: List[Any] = []
@@ -246,7 +251,7 @@ class Session(SkahaClient):
             data["name"] = name + "-" + str(replica + 1)
             data["env"].update({"REPLICA_ID": str(replica + 1)})
             data["env"].update({"REPLICA_COUNT": str(replicas)})
-            log.debug(f"Replica Data: {data}")
+            log.debug("Replica Data: %s", data)
             payload = convert.dict_to_tuples(data)
             arguments.append({"url": self.server, "params": payload})
         loop = get_event_loop()
@@ -260,7 +265,7 @@ class Session(SkahaClient):
                 log.error(err)
         return responses
 
-    def destroy(self, id: Union[str, List[str]]) -> Dict[str, bool]:
+    def destroy(self, ids: Union[str, List[str]]) -> Dict[str, bool]:
         """Destroy skaha session[s].
 
         Args:
@@ -274,15 +279,15 @@ class Session(SkahaClient):
             >>> session.destroy(id="hjko98yghj")
             >>> session.destroy(id=["hjko98yghj", "ikvp1jtp"])
         """
-        if isinstance(id, str):
-            id = [id]
+        if isinstance(ids, str):
+            ids = [ids]
         arguments: List[Any] = []
-        for value in id:
+        for value in ids:
             arguments.append({"url": f"{self.server}/{value}"})
         loop = get_event_loop()
         results = loop.run_until_complete(scale(self.session.delete, arguments))
         responses: Dict[str, bool] = {}
-        for index, identity in enumerate(id):
+        for index, identity in enumerate(ids):
             try:
                 results[index].raise_for_status()
                 responses[identity] = True

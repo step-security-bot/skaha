@@ -40,7 +40,7 @@ class CreateSpec(BaseModel):
     args: Optional[str] = Field(
         None, description="Arguments to the command.", examples=["-la"]
     )
-    env: Dict[str, Any] = Field(
+    env: Optional[Dict[str, Any]] = Field(
         ..., description="Environment variables.", examples=[{"FOO": "BAR"}]
     )
     replicas: int = Field(
@@ -85,6 +85,7 @@ class FetchSpec(BaseModel):
     view: Optional[str] = Field(None, description="Number of views.", examples=["all"])
 
     @field_validator("kind")
+    @classmethod
     def validate_kind(cls, value: str) -> str:
         """Validate kind.
 
@@ -98,6 +99,7 @@ class FetchSpec(BaseModel):
         return value
 
     @field_validator("status")
+    @classmethod
     def validate_status(cls, value: str) -> str:
         """Validate status.
 
@@ -111,6 +113,7 @@ class FetchSpec(BaseModel):
         return value
 
     @field_validator("view")
+    @classmethod
     def validate_view(cls, value: str) -> str:
         """Validate view.
 
@@ -154,7 +157,8 @@ class ContainerRegistry(BaseModel):
     )
 
     @field_validator("url")
-    def validate_url(cls, value: str) -> str:
+    @classmethod
+    def _check_url(cls, value: str) -> str:
         """Validate url.
 
         Args:
@@ -169,7 +173,8 @@ class ContainerRegistry(BaseModel):
         return value
 
     @field_validator("username")
-    def validate_username(cls, value: str) -> str:
+    @classmethod
+    def _check_username(cls, value: str) -> str:
         """Validate username.
 
         Args:
@@ -184,7 +189,8 @@ class ContainerRegistry(BaseModel):
         return value
 
     @field_validator("secret")
-    def validate_secret(cls, value: str) -> str:
+    @classmethod
+    def _check_secret(cls, value: str) -> str:
         """Validate secret.
 
         Args:
@@ -198,11 +204,10 @@ class ContainerRegistry(BaseModel):
         assert value, "secret is required"
         return value
 
-    @classmethod
-    def encoded(cls) -> str:
+    def encoded(self) -> str:
         """Return the encoded username:secret.
 
         Returns:
             str: String encoded in base64 format.
         """
-        return b64encode(f"{cls.username}:{cls.secret}".encode()).decode()
+        return b64encode(f"{self.username}:{self.secret}".encode()).decode()

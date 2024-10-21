@@ -16,7 +16,7 @@ class Images(SkahaClient):
     """Skaha Image Management."""
 
     @model_validator(mode="after")
-    def update_server(self) -> Self:
+    def _set_server(self) -> Self:
         """Sets the server path after validation."""
         self.server = f"{self.server}/{self.version}/image"  # type: ignore
         return self

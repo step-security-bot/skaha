@@ -4,11 +4,12 @@ import logging
 from os import R_OK, access, environ
 from pathlib import Path
 from time import asctime, gmtime
-from typing import Optional, Type
+from typing import Annotated, Optional
 
 from pydantic import (
     AnyHttpUrl,
     BaseModel,
+    ConfigDict,
     Field,
     FilePath,
     field_validator,
@@ -36,10 +37,7 @@ class SkahaClient(BaseModel):
         timeout (int): Timeout for requests.
         session (Session): Requests HTTP Session object.
         verify (bool): Verify SSL certificate.
-        registry (ContainerRegistry): Credentials for a private container registry.
-
-    Returns:
-        SkahaClient: Skaha Client.
+        registry (ContainerRegistry): Credentials for a private registry.
 
     Raises:
         ValidationError: If the client is misconfigured.
@@ -62,7 +60,7 @@ class SkahaClient(BaseModel):
         description="Version of the Skaha API to use.",
     )
     certificate: FilePath = Field(
-        default="{HOME}/.ssl/cadcproxy.pem".format(HOME=environ["HOME"]),
+        default=Path(f"{environ["HOME"]}/.ssl/cadcproxy.pem"),
         title="X509 Certificate",
         description="Path to the X509 certificate used for authentication.",
         validate_default=True,
@@ -72,20 +70,29 @@ class SkahaClient(BaseModel):
         title="HTTP Timeout",
         description="HTTP Timeout in seconds for requests.",
     )
-    session: Type[Session] = Field(
-        default=Session(),
-        title="Requests HTTP Session",
-        description="Requests HTTP Session object.",
-    )
     verify: bool = Field(default=True)
-    registry: Optional[Type[ContainerRegistry]] = Field(
-        default=None,
-        title="Container Registry",
-        description="Credentials for a private container registry.",
-    )
+    registry: Annotated[
+        Optional[ContainerRegistry],
+        Field(
+            default=None,
+            title="Container Registry",
+            description="Credentials for a private container registry.",
+        ),
+    ] = None
+    session: Annotated[
+        Session,
+        Field(
+            default=Session(),
+            title="HTTP Requests Session",
+            description="HTTP Requests Session.",
+        ),
+    ] = Session()
+
+    model_config: ConfigDict = ConfigDict(arbitrary_types_allowed=True, extra="forbid")
 
     @field_validator("certificate")
-    def certificate_exists_and_is_readable(cls, value: FilePath) -> FilePath:
+    @classmethod
+    def _check_certificate(cls, value: FilePath) -> FilePath:
         """Validate the certificate file.
 
         Args:
@@ -102,7 +109,7 @@ class SkahaClient(BaseModel):
         return value
 
     @model_validator(mode="after")
-    def update_session(self) -> Self:
+    def _create_session(self) -> Self:
         """Update the session object with the HTTP headers.
 
         Returns:

@@ -19,7 +19,7 @@ def dict_to_tuples(dictionary: Dict[str, Any]) -> List[Tuple[str, Any]]:
         # If the value is a dictionary, convert it to a list of tuples
         # where the key is repeated for each tuple
         if isinstance(value, dict):
-            for k, v in value.items():  # type: ignore
+            for k, v in value.items():
                 tuples.append((key, f"{k}={v}"))
         else:
             # Add the tuple (key, value) to the list

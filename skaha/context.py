@@ -13,7 +13,7 @@ class Context(SkahaClient):
     """Get available resources from the skaha server."""
 
     @model_validator(mode="after")
-    def update_server(self) -> Self:
+    def _set_server(self) -> Self:
         """Sets the server path after validation."""
         self.server = f"{self.server}/{self.version}/context"  # type: ignore
         return self
