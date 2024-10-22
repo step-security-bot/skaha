@@ -94,5 +94,6 @@ nav:
     - Client: client.md
   - Change Log: changelog.md
   - Code of Conduct: conduct.md
+  - Contributing: contributing.md
   - Security: security.md
   - License: license.md

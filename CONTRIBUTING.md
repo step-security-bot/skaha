@@ -1,13 +1,15 @@
 # Contributing to Skaha
 
-Thank you for considering contributing to the Skaha project! We welcome contributions from everyone. Please follow the guidelines below to help us maintain a high-quality codebase.
+Thank you for considering contributing to the Skaha project! We welcome contributions from everyone. Please follow the guidelines below to help us maintain a high-quality codebase. 
 
-- We follow the [Contributor Convenant of Code of Conduct](CODE_OF_CONDUCT.md). If you wish to contribute to Skaha, please make sure to familiarize yourself with it.
-- Contributions are not limited to just code. You can help us by:
-  - Answering questions on the [Discussions board](https://github.com/shinybrar/skaha/discussions)
-  - Improving the [Documentation](https://github.com/shinybrar/skaha/tree/main/docs)
-  - Reporting bugs and suggesting features via [GitHub Issues](https://github.com/shinybrar/skaha/issues)
-  - Spreading the word about Skaha
+We follow the [Contributor Convenant of Code of Conduct](https://github.com/shinybrar/skaha/blob/main/CODE_OF_CONDUCT.md). If you wish to contribute to Skaha, please make sure to familiarize yourself with it.
+
+Contributions are not limited to just code. You can help us by:
+
+- Answering questions on the [Discussions board](https://github.com/shinybrar/skaha/discussions)
+- Improving the [Documentation](https://github.com/shinybrar/skaha/tree/main/docs)
+- Reporting bugs and suggesting features via [GitHub Issues](https://github.com/shinybrar/skaha/issues)
+- Spreading the word about Skaha
 
 ## How to Contribute Code
 
