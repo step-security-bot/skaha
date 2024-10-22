@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in this project, please report it by sending an email to shiny.brar@nrc-cnrc.gc.ca. 
+If you discover a security vulnerability in this project, please report it by sending an email to shiny.brar@nrc-cnrc.gc.ca.
 
 We will respond as quickly as possible to address the issue.
 
