@@ -30,8 +30,10 @@ print(session_id)
 
 !!! tip "Container Replicas"
     When spawning sessions with the Skaha API, it adds two additional environment variables to each container:
-        - `REPLICA_COUNT`: An integer representing the total number of replicas spawned, e.g. 3 for the example above.
-        - `REPLICA_ID`: An integer representing the unique ID of the replica, e.g. 0, 1, 2 for the example above.
+
+    - `REPLICA_COUNT`: An integer representing the total number of replicas spawned, e.g. 3 for the example above.
+    - `REPLICA_ID`: An integer representing the unique ID of the replica, e.g. 0, 1, 2 for the example above.
+
     These environment variables can be used to configure your application to run in a distributed manner. For example, you can use the `REPLICA_COUNT` to configure the number of workers and the `REPLICA_ID` to configure the rank of the worker.
 
 !!! warning "Private Container Registry Access"
@@ -39,7 +41,6 @@ print(session_id)
     ```python
     from skaha.models import ContainerRegistry
     from skaha.session import Session
-
     registry = ContainerRegistry(username="username", password="sUp3rS3cr3t")
     session = Session(registry=registry)
     ```

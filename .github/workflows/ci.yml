@@ -53,7 +53,7 @@ jobs:
         CANFAR_USERNAME: ${{ secrets.CANFAR_USERNAME }}
         CANFAR_PASSWORD: ${{ secrets.CANFAR_PASSWORD }}
       run: |
-        echo "machine ${CANFAR_BASEURL}\n  login ${CANFAR_USERNAME}\n  password ${CANFAR_PASSWORD}" > ~/.netrc
+        echo -e "machine ${CANFAR_BASEURL}\n  login ${CANFAR_USERNAME}\n  password ${CANFAR_PASSWORD}" > ~/.netrc
         uv run cadc-get-cert --days-valid 1 --netrc-file ~/.netrc
     -
       name: Run tests
