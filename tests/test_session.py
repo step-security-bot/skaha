@@ -1,7 +1,7 @@
 """Test Skaha Session API."""
 
 from time import sleep
-from typing import List
+from typing import Any, Dict, List
 from uuid import uuid4
 
 import pytest
@@ -97,14 +97,26 @@ def test_create_session(session: Session, name: str):
 
 def test_get_session_info(session: Session, name: str):
     """Test getting session info."""
-    sleep(10)
-    info = session.info(pytest.IDENTITY)  # type: ignore
-    assert name in info[0]["name"]  # type: ignore
+    info: List[Dict[str, Any]] = [{}]
+    attempt: int = 0
+    while attempt < 10:
+        sleep(6)
+        info = session.info(pytest.IDENTITY)  # type: ignore
+        if len(info) == 1:
+            break
+        attempt += 1
+    assert info[pytest.IDENTITY[0]]["name"] == name  # type: ignore
 
 
 def test_session_logs(session: Session, name: str):
     """Test getting session logs."""
-    sleep(10)
+    attempt: int = 0
+    logs: Dict[str, str] = {}
+    while attempt < 10:
+        sleep(6)
+        info = session.info(pytest.IDENTITY)  # type: ignore
+        if info[0]["status"] == "Succeeded":
+            break
     logs = session.logs(pytest.IDENTITY)  # type: ignore
     success = False
     for line in logs[pytest.IDENTITY[0]].split("\n"):  # type: ignore
