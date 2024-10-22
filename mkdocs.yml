@@ -83,6 +83,7 @@ markdown_extensions:
 
 nav:
   - Skaha: index.md
+  
   - Get Started: get-started.md
   - Examples: examples.md
   - API Reference:
@@ -92,3 +93,7 @@ nav:
     - Overview: overview.md
     - Client: client.md
   - Change Log: changelog.md
+  - Code of Conduct: conduct.md
+  - Security: security.md
+  - License: license.md
+  
