@@ -3,28 +3,34 @@ name = "skaha"
 version = "1.3.1"
 requires-python = ">=3.9"
 description = "Python Client for CANFAR Science Platform"
-license = "MIT"
+license = { file = "LICENSE" }
 readme = "README.md"
 keywords = ["skaha", "canfar", "python", "client", "container", "platform"]
 authors =[
-    {"name"="Shiny Brar", "email"="shiny.brar@nrc-cnrc.gc.ca>"}
+    {"name"="Shiny Brar", "email"="shiny.brar@nrc-cnrc.gc.ca"}
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
     "Intended Audience :: Developers",
+    "Intended Audience :: Education",
     "Intended Audience :: Science/Research",
+    "Intended Audience :: System Administrators",
     "License :: MIT License",
     "Natural Language :: English",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: POSIX :: Linux",
-    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Scientific/Engineering :: Astronomy",
     "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
 ]
 dependencies = [
     "click>=8.1.7",
