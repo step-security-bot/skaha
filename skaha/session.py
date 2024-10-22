@@ -152,7 +152,7 @@ class Session(SkahaClient):
         """Get logs from a session[s].
 
         Args:
-            id (Union[List[str], str]): Session ID[s].
+            ids (Union[List[str], str]): Session ID[s].
 
         Returns:
             Dict[str, str]: Logs in text/plain format.
@@ -269,7 +269,7 @@ class Session(SkahaClient):
         """Destroy skaha session[s].
 
         Args:
-            id (Union[str, List[str]]): Session ID[s].
+            ids (Union[str, List[str]]): Session ID[s].
 
         Returns:
             Dict[str, bool]: A dictionary of session IDs
