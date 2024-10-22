@@ -1,6 +1,6 @@
 # Contributing to Skaha
 
-Thank you for considering contributing to the Skaha project! We welcome contributions from everyone. Please follow the guidelines below to help us maintain a high-quality codebase. 
+Thank you for considering contributing to the Skaha project! We welcome contributions from everyone. Please follow the guidelines below to help us maintain a high-quality codebase.
 
 We follow the [Contributor Convenant of Code of Conduct](https://github.com/shinybrar/skaha/blob/main/CODE_OF_CONDUCT.md). If you wish to contribute to Skaha, please make sure to familiarize yourself with it.
 
@@ -53,7 +53,7 @@ Make your changes. Please make sure to add tests for your changes if applicable.
 
 ### 5. Run the Tests
 
-To run tests for Skaha, you need to have a valid CANFAR account and access to the CANFAR Science Platform. To generate a certificate, please refer to the [get started](docs/get-started.md) section.
+To run tests for Skaha, you need to have a valid CANFAR account and access to the CANFAR Science Platform. To generate a certificate, please refer to the [get started](get-started.md) section.
 
 ```bash
 uv run pytest

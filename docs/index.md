@@ -36,5 +36,5 @@
     ```
 
 [Get Started :material-coffee:](get-started.md){: .md-button .md-button--primary } 
-[Go to GitHub :fontawesome-brands-github:](https://github.com/chimefrb/skaha){: .md-button .md-button--primary }
+[Go to GitHub :fontawesome-brands-github:](https://github.com/shinybrar/skaha){: .md-button .md-button--primary }
 [Changelog :material-vector-polyline-remove:](changelog.md){: .md-button .md-button--primary }
