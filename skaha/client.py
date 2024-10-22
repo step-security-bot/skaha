@@ -60,7 +60,7 @@ class SkahaClient(BaseModel):
         description="Version of the Skaha API to use.",
     )
     certificate: FilePath = Field(
-        default=Path(f"{environ["HOME"]}/.ssl/cadcproxy.pem"),
+        default=Path(f"{environ['HOME']}/.ssl/cadcproxy.pem"),
         title="X509 Certificate",
         description="Path to the X509 certificate used for authentication.",
         validate_default=True,
