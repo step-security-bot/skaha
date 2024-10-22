@@ -41,6 +41,7 @@ print(session_id)
     ```python
     from skaha.models import ContainerRegistry
     from skaha.session import Session
+
     registry = ContainerRegistry(username="username", password="sUp3rS3cr3t")
     session = Session(registry=registry)
     ```
