@@ -13,13 +13,14 @@ jobs:
       -
         name: Setup code repository
         uses: actions/checkout@v4.2.1
-      -
-        name: Setup Python
+        with:
+          fetch-depth: 1
+      - name: Setup Python
         uses: actions/setup-python@v5.2.0
         with:
-          python-version: '3.9'
+          python-version: 3.12
       -
-        name: Run pre-commit
+        name: pre-commit
         uses: pre-commit/action@v3.0.1
 
   tests:
@@ -37,22 +38,32 @@ jobs:
           fetch-depth: 1
       -
         name: Setup uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v3.1.7
+        with:
+          enable-cache: true
       -
         name: Setup Python ${{ matrix.python-version }}
         run: |
           uv python install ${{ matrix.python-version }}
           uv sync --all-extras --dev
       -
+        name: Login to Canfar
+        env:
+          CANFAR_BASEURL: ${{ secrets.CANFAR_BASEURL }}
+          CANFAR_USERNAME: ${{ secrets.CANFAR_USERNAME }}
+          CANFAR_PASSWORD: ${{ secrets.CANFAR_PASSWORD }}
+        run: |
+          echo "machine ${CANFAR_BASEURL}\n  login ${CANFAR_USERNAME}\n  password ${CANFAR_PASSWORD}" > ~/.netrc
+          uv run cadc-get-cert --days-valid 1 --netrc-file ~/.netrc
+      -
         name: Run tests
         run: |
-          uv run cadc-get-cert --user ${{ secrets.CANFAR_USERNAME }} --password ${{ secrets.CANFAR_PASSWORD }} --days-valid 1
           uv run pytest tests --cov --cov-report=xml --junitxml=junit.xml -o junit_family=legacy
       -
         name: Upload coverage to Codecov
         env:
           CODECOV_TOKEN:  ${{ env.CODECOV_TOKEN }}
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v4.6.0
         with:
           fail_ci_if_error: true # Fail the CI if an error occurs during the upload
           token: ${{ env.CODECOV_TOKEN }}
