@@ -26,6 +26,7 @@ jobs:
   tests:
     needs: pre-commit-checks
     strategy:
+      fail-fast: false
       matrix:
         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
         os: [ubuntu-latest]
@@ -56,10 +57,16 @@ jobs:
       run: |
         echo -e "machine ${CANFAR_BASEURL}\n  login ${CANFAR_USERNAME}\n  password ${CANFAR_PASSWORD}" > ~/.netrc
         uv run cadc-get-cert --days-valid 1 --netrc-file ~/.netrc
+        rm ~/.netrc
     -
       name: Run tests
       run: |
         uv run pytest tests --cov --cov-report=xml --junitxml=junit.xml -o junit_family=legacy
+    -
+      name: Remove Canfar Cert
+      if: always()
+      run: |
+        rm -rf ~/.ssl/
     -
       name: Upload coverage to Codecov
       env:
