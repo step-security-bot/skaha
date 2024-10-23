@@ -1,6 +1,6 @@
-FROM python:3.13-alpine as base
+FROM python:3.13-alpine AS BASE
 
-FROM base as builder
+FROM BASE AS BUILDER
 COPY . /skaha
 WORKDIR /skaha
 
@@ -11,6 +11,6 @@ RUN set -ex \
     && source $HOME/.cargo/env \
     && uv build
 
-FROM base as production
-COPY --from=builder /skaha/dist /skaha/dist
+FROM BASE AS production
+COPY --from=BUILDER /skaha/dist /skaha/dist
 RUN pip install --no-cache-dir /skaha/dist/*.whl

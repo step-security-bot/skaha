@@ -70,9 +70,16 @@ jobs:
             ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
             ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
       -
-        name: Attest Container Image
+        name: Attest GHCR Container Image
         uses: actions/attest-build-provenance@v1
         with:
           subject-name: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+      -
+        name: Attest Dockerhub Container Image
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.build.outputs.digest }}
           push-to-registry: true
