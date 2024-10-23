@@ -70,7 +70,7 @@ jobs:
     -
       name: Upload coverage to Codecov
       env:
-        CODECOV_TOKEN:  ${{ env.CODECOV_TOKEN }}
+        CODECOV_TOKEN:  ${{ secrets.CODECOV_TOKEN }}
       uses: codecov/codecov-action@v4.6.0
       with:
         fail_ci_if_error: true # Fail the CI if an error occurs during the upload
