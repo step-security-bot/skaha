@@ -104,8 +104,8 @@ def test_get_session_info(session: Session, name: str):
         sleep(1)
         info = session.info(pytest.IDENTITY)  # type: ignore
         if len(info) == 1:
+            success = True
             break
-        success = True
     assert success, "Session info not found."
 
 
