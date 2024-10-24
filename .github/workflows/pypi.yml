@@ -1,0 +1,13 @@
+name: Publish Skaha Artifacts
+
+on:
+  repository_dispatch:
+    types: [pypi-release]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout Code
+        uses: actions/checkout@v4.2.1

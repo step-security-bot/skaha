@@ -19,7 +19,7 @@ def get_logger(
 
     """
     # create logger
-    logger = logging.getLogger(f"skaha-client-{name}")
+    logger = logging.getLogger(name)
     logger.setLevel(level)
 
     # create console handler and set level to debug
@@ -47,5 +47,7 @@ def get_logger(
 
         # add filer to logger
         logger.addHandler(filer)
+
+    logger.propagate = False
 
     return logger
