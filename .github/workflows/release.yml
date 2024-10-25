@@ -1,4 +1,4 @@
-name: Release Container Build
+name: Publish Skaha to Container Registries
 
 on:
   repository_dispatch:
