@@ -24,16 +24,16 @@ jobs:
           event-type: edge-build
           token: ${{ secrets.GITHUB_TOKEN }}
           client-payload: |-
-            {
-              "release_created": ${{ steps.release-please.outputs.release_created }},
-              "upload_url": ${{ steps.release-please.outputs.upload_url }},
-              "html_url": ${{ steps.release-please.outputs.html_url }},
-              "tag_name": ${{ steps.release-please.outputs.tag_name }},
-              "major": ${{ steps.release-please.outputs.major }},
-              "minor": ${{ steps.release-please.outputs.minor }},
-              "patch": ${{ steps.release-please.outputs.patch }},
-              "sha": ${{ steps.release-please.outputs.sha }}
-            }
+            '{
+              "release_created": "${{ steps.release-please.outputs.release_created }}",
+              "upload_url": "${{ steps.release-please.outputs.upload_url }}",
+              "html_url": "${{ steps.release-please.outputs.html_url }}",
+              "tag_name": "${{ steps.release-please.outputs.tag_name }}",
+              "major": "${{ steps.release-please.outputs.major }}",
+              "minor": "${{ steps.release-please.outputs.minor }}",
+              "patch": "${{ steps.release-please.outputs.patch }}",
+              "sha": "${{ steps.release-please.outputs.sha }}"
+            }'
       -
         name: Dispatch Release Build
         if: ${{ steps.release-please.outputs.release_created }}
@@ -43,16 +43,16 @@ jobs:
           event-type: release-build
           token: ${{ secrets.GITHUB_TOKEN }}
           client-payload: |-
-            {
-              "release_created": ${{ steps.release-please.outputs.release_created }},
-              "upload_url": ${{ steps.release-please.outputs.upload_url }},
-              "html_url": ${{ steps.release-please.outputs.html_url }},
-              "tag_name": ${{ steps.release-please.outputs.tag_name }},
-              "major": ${{ steps.release-please.outputs.major }},
-              "minor": ${{ steps.release-please.outputs.minor }},
-              "patch": ${{ steps.release-please.outputs.patch }},
-              "sha": ${{ steps.release-please.outputs.sha }}
-            }
+            '{
+              "release_created": "${{ steps.release-please.outputs.release_created }}",
+              "upload_url": "${{ steps.release-please.outputs.upload_url }}",
+              "html_url": "${{ steps.release-please.outputs.html_url }}",
+              "tag_name": "${{ steps.release-please.outputs.tag_name }}",
+              "major": "${{ steps.release-please.outputs.major }}",
+              "minor": "${{ steps.release-please.outputs.minor }}",
+              "patch": "${{ steps.release-please.outputs.patch }}",
+              "sha": "${{ steps.release-please.outputs.sha }}"
+            }'
       -
         name: Dispatch PYPI Release
         if: ${{ steps.release-please.outputs.release_created }}
@@ -62,13 +62,13 @@ jobs:
           event-type: pypi-release
           token: ${{ secrets.GITHUB_TOKEN }}
           client-payload: |-
-            {
-              "release_created": ${{ steps.release-please.outputs.release_created }},
-              "upload_url": ${{ steps.release-please.outputs.upload_url }},
-              "html_url": ${{ steps.release-please.outputs.html_url }},
-              "tag_name": ${{ steps.release-please.outputs.tag_name }},
-              "major": ${{ steps.release-please.outputs.major }},
-              "minor": ${{ steps.release-please.outputs.minor }},
-              "patch": ${{ steps.release-please.outputs.patch }},
-              "sha": ${{ steps.release-please.outputs.sha }}
-            }
+            '{
+              "release_created": "${{ steps.release-please.outputs.release_created }}",
+              "upload_url": "${{ steps.release-please.outputs.upload_url }}",
+              "html_url": "${{ steps.release-please.outputs.html_url }}",
+              "tag_name": "${{ steps.release-please.outputs.tag_name }}",
+              "major": "${{ steps.release-please.outputs.major }}",
+              "minor": "${{ steps.release-please.outputs.minor }}",
+              "patch": "${{ steps.release-please.outputs.patch }}",
+              "sha": "${{ steps.release-please.outputs.sha }}"
+            }'
