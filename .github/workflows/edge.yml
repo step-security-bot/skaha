@@ -24,7 +24,7 @@ jobs:
       -
         name: Client Payload
         run: |
-          echo "Client Payload: ${{ github.event.client_payload }}"
+          echo "Client Payload: ${{ toJson(github.event.client_payload) }}"
       -
         name: Checkout Code
         uses: actions/checkout@v4.2.1

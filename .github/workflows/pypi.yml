@@ -5,9 +5,55 @@ on:
     types: [pypi-release]
 
 jobs:
-  build:
+  pypi-release:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      attestations: write
+    environment:
+      name: pypi-release
+      url: https://pypi.org/p/skaha
     steps:
+      -
+        name: Echo Build Dispatch
+        run: |
+          echo "Pypi Release Triggered"
+          echo "Event Payload: ${{ toJson(github.event.client_payload) }}"
       -
         name: Checkout Code
         uses: actions/checkout@v4.2.1
+      -
+        name: Install uv
+        uses: astral-sh/setup-uv@v3.1.7
+        with:
+          enable-cache: false
+      -
+        name: Set up Python
+        run: uv python install 3.13
+      -
+        name: Build release distributions
+        run: uv build
+      -
+        name: Publish release distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.10.3
+        with:
+          attestations: false
+          packages-dir: dist/
+          verbose: true
+          print-hash: true
+      -
+        name: Attestations for PYPI Wheel
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            dist/*.whl
+          subject-name: skaha-wheel
+          show-summary: true
+      -
+        name: Attestations for PYPI Source
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            dist/*.tar.gz
+          subject-name: skaha-source
+          show-summary: true
