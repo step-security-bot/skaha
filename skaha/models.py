@@ -2,14 +2,14 @@
 
 from base64 import b64encode
 from os import environ
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Literal, Optional
 
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from typing_extensions import Self
 
-KINDS: List[str] = ["desktop", "notebook", "carta", "headless"]
-STATUS: List[str] = ["Pending", "Running", "Terminating", "Succeeded", "Error"]
-VIEW: List[str] = ["all"]
+KINDS = Literal["desktop", "notebook", "carta", "headless"]
+STATUS = Literal["Pending", "Running", "Terminating", "Succeeded", "Error"]
+VIEW = Literal["all"]
 
 
 class CreateSpec(BaseModel):
@@ -32,7 +32,7 @@ class CreateSpec(BaseModel):
     )
     cores: int = Field(1, description="Number of cores.", ge=1, le=256)
     ram: int = Field(4, description="Amount of RAM (GB).", ge=1, le=512)
-    kind: str = Field(
+    kind: KINDS = Field(
         ..., description="Type of skaha session.", examples=["headless", "notebook"]
     )
     gpus: Optional[int] = Field(None, description="Number of GPUs.", ge=1, le=28)
@@ -47,6 +47,8 @@ class CreateSpec(BaseModel):
         1, description="Number of sessions to launch.", ge=1, le=256, exclude=True
     )
 
+    model_config = ConfigDict(validate_assignment=True, populate_by_name=True)
+
     # Validate that cmd, args and env are only used with headless sessions.
     @model_validator(mode="after")
     def validate_headless(self) -> Self:
@@ -58,7 +60,6 @@ class CreateSpec(BaseModel):
         Returns:
             Dict[str, Any]: Validated values.
         """
-        assert self.kind in KINDS, f"kind must be one of: {KINDS}"
         if self.cmd or self.args or self.env:
             assert (
                 self.kind == "headless"
@@ -76,55 +77,15 @@ class FetchSpec(BaseModel):
         object: Pydantic BaseModel object.
     """
 
-    kind: Optional[str] = Field(
-        None, description="Type of skaha session.", examples=["headless"]
+    kind: Optional[KINDS] = Field(
+        None, description="Type of skaha session.", examples=["headless"], alias="type"
     )
-    status: Optional[str] = Field(
+    status: Optional[STATUS] = Field(
         None, description="Status of the session.", examples=["Running"]
     )
-    view: Optional[str] = Field(None, description="Number of views.", examples=["all"])
+    view: Optional[VIEW] = Field(None, description="Number of views.", examples=["all"])
 
-    @field_validator("kind")
-    @classmethod
-    def validate_kind(cls, value: str) -> str:
-        """Validate kind.
-
-        Args:
-            value (str): Value to validate.
-
-        Returns:
-            str: Validated value.
-        """
-        assert value in KINDS, f"kind must be one of: {KINDS}"
-        return value
-
-    @field_validator("status")
-    @classmethod
-    def validate_status(cls, value: str) -> str:
-        """Validate status.
-
-        Args:
-            value (str): Value to validate.
-
-        Returns:
-            str: Validated value.
-        """
-        assert value in STATUS, f"status must be one of: {STATUS}"
-        return value
-
-    @field_validator("view")
-    @classmethod
-    def validate_view(cls, value: str) -> str:
-        """Validate view.
-
-        Args:
-            value (str): Value to validate.
-
-        Returns:
-            str: Validated value.
-        """
-        assert value in VIEW, f"views must be one of: {VIEW}"
-        return value
+    model_config = ConfigDict(validate_assignment=True, populate_by_name=True)
 
 
 class ContainerRegistry(BaseModel):

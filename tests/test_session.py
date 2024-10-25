@@ -34,19 +34,19 @@ def test_fetch_with_kind(session: Session):
 def test_fetch_malformed_kind(session: Session):
     """Test fetching images with malformed kind."""
     with pytest.raises(ValidationError):
-        session.fetch(kind="invalid")
+        session.fetch(kind="invalid")  # type: ignore
 
 
 def test_fetch_with_malformed_view(session: Session):
     """Test fetching images with malformed view."""
     with pytest.raises(ValidationError):
-        session.fetch(view="invalid")
+        session.fetch(view="invalid")  # type: ignore
 
 
 def test_fetch_with_malformed_status(session: Session):
     """Test fetching images with malformed status."""
     with pytest.raises(ValidationError):
-        session.fetch(status="invalid")
+        session.fetch(status="invalid")  # type: ignore
 
 
 def test_session_stats(session: Session):
@@ -59,7 +59,7 @@ def test_create_session_with_malformed_kind(session: Session, name: str):
     with pytest.raises(ValidationError):
         session.create(
             name=name,
-            kind="invalid",
+            kind="invalid",  # type: ignore
             image="ubuntu:latest",
             cmd="bash",
             replicas=1,
@@ -130,5 +130,5 @@ def test_session_logs(session: Session, name: str):
 def test_delete_session(session: Session, name: str):
     """Test deleting a session."""
     # Delete the session
-    deletion = session.destroy(pytest.IDENTITY[0])  # type: ignore
+    deletion = session.destroy_with(prefix=name)  # type: ignore
     assert deletion == {pytest.IDENTITY[0]: True}  # type: ignore

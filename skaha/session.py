@@ -9,7 +9,7 @@ from requests.models import Response
 from typing_extensions import Self
 
 from skaha.client import SkahaClient
-from skaha.models import CreateSpec, FetchSpec
+from skaha.models import KINDS, STATUS, VIEW, CreateSpec, FetchSpec
 from skaha.utils import convert, logs
 from skaha.utils.threaded import scale
 
@@ -37,21 +37,21 @@ class Session(SkahaClient):
         """Sets the server path after validation."""
         suffix = "session"
         self.server = f"{self.server}/{self.version}/{suffix}"  # type: ignore
-        log.debug(f"Server set to {self.server}")
+        log.debug("Server set to %s", self.server)
         return self
 
     def fetch(
         self,
-        kind: Optional[str] = None,
-        status: Optional[str] = None,
-        view: Optional[str] = None,
+        kind: Optional[KINDS] = None,
+        status: Optional[STATUS] = None,
+        view: Optional[VIEW] = None,
     ) -> List[Dict[str, str]]:
         """List open sessions for the user.
 
         Args:
-            kind (str, optional): Session kind. Defaults to None.
-            status (str, optional): Session status. Defaults to None.
-            view (str, optional): Session view level. Defaults to None.
+            kind (Optional[KINDS], optional): Session kind. Defaults to None.
+            status (Optional[STATUS], optional): Session status. Defaults to None.
+            view (Optional[VIEW], optional): Session view level. Defaults to None.
 
         Notes:
             By default, only the calling user's sessions are listed. If views is
@@ -84,12 +84,15 @@ class Session(SkahaClient):
               'startTime': '2222-12-07T05:45:58Z'},
               ...]
         """
-        values: Dict[str, str] = {}
+        values: Dict[str, Any] = {}
         for key, value in {"kind": kind, "status": status, "view": view}.items():
             if value:
                 values[key] = value
         spec = FetchSpec(**values)
-        parameters = spec.model_dump(exclude_none=True)
+        # Kind is an alias for type in the API. It is renamed in the Python Client
+        # to avoid conflicts with the built-in type function. by_alias true,
+        # returns, {"type": "headless"} instead of {"kind": "headless"}
+        parameters = spec.model_dump(exclude_none=True, by_alias=True)
         log.debug(parameters)
         response: Response = self.session.get(url=self.server, params=parameters)  # type: ignore # noqa: E501
         response.raise_for_status()
@@ -117,7 +120,7 @@ class Session(SkahaClient):
         response.raise_for_status()
         return response.json()
 
-    def info(self, id: Union[List[str], str]) -> List[Dict[str, Any]]:
+    def info(self, ids: Union[List[str], str]) -> List[Dict[str, Any]]:
         """Get information about session[s].
 
         Args:
@@ -131,11 +134,11 @@ class Session(SkahaClient):
             >>> session.info(id=["hjko98yghj", "ikvp1jtp"])
         """
         # Convert id to list if it is a string
-        if isinstance(id, str):
-            id = [id]
+        if isinstance(ids, str):
+            ids = [ids]
         parameters: Dict[str, str] = {"view": "event"}
         arguments: List[Any] = []
-        for value in id:
+        for value in ids:
             arguments.append({"url": f"{self.server}/{value}", "params": parameters})
         loop = get_event_loop()
         results = loop.run_until_complete(scale(self.session.get, arguments))
@@ -185,7 +188,7 @@ class Session(SkahaClient):
         image: str,
         cores: int = 2,
         ram: int = 4,
-        kind: str = "headless",
+        kind: KINDS = "headless",
         gpu: Optional[int] = None,
         cmd: Optional[str] = None,
         args: Optional[str] = None,
@@ -295,3 +298,35 @@ class Session(SkahaClient):
                 log.error(err)
                 responses[identity] = False
         return responses
+
+    def destroy_with(
+        self, prefix: str, kind: KINDS = "headless", status: STATUS = "Succeeded"
+    ) -> Dict[str, bool]:
+        """Destroy skaha session[s] matching search criteria.
+
+        Args:
+            prefix (str): Prefix to match in the session name.
+            kind (KINDS): Type of skaha session. Defaults to "headless".
+            status (STATUS): Status of the session. Defaults to "Succeeded".
+
+
+        Returns:
+            Dict[str, bool]: A dictionary of session IDs
+            and a bool indicating if the session was destroyed.
+
+        Notes:
+            The prefix is case-sensitive.
+            This method is useful for destroying multiple sessions at once.
+
+        Examples:
+            >>> session.destroy_with(prefix="test")
+            >>> session.destroy_with(prefix="test", kind="desktop")
+            >>> session.destroy_with(prefix="test", kind="headless", status="Running")
+
+        """
+        sessions = self.fetch(kind=kind, status=status)
+        ids: List[str] = []
+        for session in sessions:
+            if session["name"].startswith(prefix):
+                ids.append(session["id"])
+        return self.destroy(ids)
