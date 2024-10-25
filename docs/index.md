@@ -4,7 +4,9 @@
 
     A lightweight python interface to the CANFAR Science Platform.
 
-??? Tip "Support for Private Container Images on Harbor"
+!!! Info "New in v1.4.0+"
+
+    **:lock: Support for Private Container Images on Harbor**
 
     Starting October 2024, to create a session with a private container image from the [CANFAR Harbor Registry](https://images.canfar.net/), you will need to provide your harbor `username` and the `CLI Secret` through a `ContainerRegistry` object. 
 
@@ -14,6 +16,14 @@
 
     registry = ContainerRegistry(username="username", password="sUp3rS3cr3t")
     session = Session(registry=registry)
+    ```
+
+    **:boom: Destroy Sessions without `ids`**
+    ```python
+    from skaha.session import Session
+    session = Session()
+    session.destroy_with(prefix="test", kind="headless", status="Running")
+    session.destroy_with(prefix="test", kind="headless", status="Pending")
     ```
 
 !!! example "Example"
