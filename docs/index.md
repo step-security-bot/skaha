@@ -21,6 +21,7 @@
     **:boom: Destroy Sessions without `ids`**
     ```python
     from skaha.session import Session
+
     session = Session()
     session.destroy_with(prefix="test", kind="headless", status="Running")
     session.destroy_with(prefix="test", kind="headless", status="Pending")
