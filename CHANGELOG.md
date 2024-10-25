@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/shinybrar/skaha/compare/v1.4.0...v1.4.1) (2024-10-25)
+
+
+### Bug Fixes
+
+* **github-actions:** added path restrictions for workflow triggers, reduced permissions for build flows ([1220765](https://github.com/shinybrar/skaha/commit/12207651d6f901ec4bd1820cfeb5f3cdf7edb0a1))
+* **pyproject:** fixed toml file with bad license key ([ac1ffb6](https://github.com/shinybrar/skaha/commit/ac1ffb620ae4fbfabcbd5c136f192d56949ba29b))
+
 ## [1.4.0](https://github.com/shinybrar/skaha/compare/v1.3.1...v1.4.0) (2024-10-25)
 
 
