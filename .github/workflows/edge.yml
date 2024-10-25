@@ -4,13 +4,6 @@ on:
   repository_dispatch:
     types: [edge-build]
 
-permissions:
-  contents: write
-  pull-requests: write
-  packages: write
-  attestations: write
-  id-token: write
-
 env:
   GHCR_REGISTRY: ghcr.io
   DOCKERHUB_REGISTRY: docker.io
@@ -20,6 +13,10 @@ env:
 jobs:
   edge-build:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      attestations: write
+      id-token: write
     steps:
       -
         name: Client Payload

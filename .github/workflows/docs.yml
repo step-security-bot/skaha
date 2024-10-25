@@ -4,6 +4,17 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'docs/**'
+      - mkdocs.yml
+      - .github/workflows/docs.yml
+      - CODE_OF_CONDUCT.md
+      - CONTRIBUTING.md
+      - LICENSE
+      - SECURITY.md
+      - CHANGELOG.md
+      - README.md
+
 permissions:
   contents: write
 jobs:
