@@ -4,7 +4,7 @@
 
     A lightweight python interface to the CANFAR Science Platform.
 
-!!! Info "New in v1.4.0+"
+!!! Info "New in v1.4+"
 
     **:lock: Support for Private Container Images on Harbor**
 
@@ -14,8 +14,15 @@
     from skaha.models import ContainerRegistry
     from skaha.session import Session
 
-    registry = ContainerRegistry(username="username", password="sUp3rS3cr3t")
+    registry = ContainerRegistry(username="username", secret="sUp3rS3cr3t")
     session = Session(registry=registry)
+    ```
+
+    Alernatively, if you have environment variables, `SKAHA_REGISTRY_USERNAME` and `SKAHA_REGISTRY_SECRET`, you can create a `ContainerRegistry` object without providing the `username` and `secret`.
+
+    ```python
+    from skaha.models import ContainerRegistry
+    registry = ContainerRegistry()
     ```
 
     **:boom: Destroy Sessions without `ids`**
