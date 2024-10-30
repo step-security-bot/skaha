@@ -7,6 +7,10 @@ from typing import Any, Dict, Literal, Optional
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from typing_extensions import Self
 
+from skaha.utils import logs
+
+log = logs.get_logger(__name__)
+
 KINDS = Literal["desktop", "notebook", "carta", "headless"]
 STATUS = Literal["Pending", "Running", "Terminating", "Succeeded", "Error"]
 VIEW = Literal["all"]
@@ -161,7 +165,8 @@ class ContainerRegistry(BaseModel):
             str: Validated value.
         """
         if not value:
-            environ.get("SKAHA_REGISTRY_SECRET", None)
+            value = environ.get("SKAHA_REGISTRY_SECRET", None) # type: ignore
+            log.info("Using SKAHA_REGISTRY_SECRET from environment")
         assert value, "secret is required"
         return value
 
