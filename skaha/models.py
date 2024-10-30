@@ -165,7 +165,7 @@ class ContainerRegistry(BaseModel):
             str: Validated value.
         """
         if not value:
-            value = environ.get("SKAHA_REGISTRY_SECRET", None) # type: ignore
+            value = environ.get("SKAHA_REGISTRY_SECRET", None)  # type: ignore
             log.info("Using SKAHA_REGISTRY_SECRET from environment")
         assert value, "secret is required"
         return value
