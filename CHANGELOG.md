@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.2](https://github.com/shinybrar/skaha/compare/v1.4.1...v1.4.2) (2024-10-30)
+
+
+### Bug Fixes
+
+* **models:** added logging ([514fda2](https://github.com/shinybrar/skaha/commit/514fda226a5167ed200b63f0e0bfab06901f4683))
+
+
+### Documentation
+
+* **index:** updated the landing page ([e7dbac2](https://github.com/shinybrar/skaha/commit/e7dbac2049e4bc9e24886c83d1d971c04119c0a8))
+
 ## [1.4.1](https://github.com/shinybrar/skaha/compare/v1.4.0...v1.4.1) (2024-10-25)
 
 
