@@ -22,6 +22,7 @@
 
     ```python
     from skaha.models import ContainerRegistry
+
     registry = ContainerRegistry()
     ```
 
