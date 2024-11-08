@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/shinybrar/skaha/compare/v1.4.2...v1.4.3) (2024-11-08)
+
+
+### Bug Fixes
+
+* **models:** create.spec model used in session.create now expects env to be None by default ([c34b110](https://github.com/shinybrar/skaha/commit/c34b110fba0e8a84d5e811bc55060fb7a370f6b5))
+
 ## [1.4.2](https://github.com/shinybrar/skaha/compare/v1.4.1...v1.4.2) (2024-10-30)
 
 
