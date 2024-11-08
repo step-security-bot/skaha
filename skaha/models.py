@@ -45,7 +45,7 @@ class CreateSpec(BaseModel):
         None, description="Arguments to the command.", examples=["-la"]
     )
     env: Optional[Dict[str, Any]] = Field(
-        ..., description="Environment variables.", examples=[{"FOO": "BAR"}]
+        None, description="Environment variables.", examples=[{"FOO": "BAR"}]
     )
     replicas: int = Field(
         1, description="Number of sessions to launch.", ge=1, le=256, exclude=True
