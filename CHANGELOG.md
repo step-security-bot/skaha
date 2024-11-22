@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.4](https://github.com/shinybrar/skaha/compare/v1.4.3...v1.4.4) (2024-11-22)
+
+
+### Bug Fixes
+
+* **session:** fixed set env in session.create ([00b67ac](https://github.com/shinybrar/skaha/commit/00b67ac1c834439596e481e0a5db17c33f9d7290))
+
 ## [1.4.3](https://github.com/shinybrar/skaha/compare/v1.4.2...v1.4.3) (2024-11-08)
 
 
