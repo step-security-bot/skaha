@@ -250,10 +250,12 @@ class Session(SkahaClient):
         log.info(data)
         payload: List[Tuple[str, Any]] = []
         arguments: List[Any] = []
+        if not data.get("env"):
+            data["env"] = {}
         for replica in range(replicas):
             data["name"] = name + "-" + str(replica + 1)
-            data["env"].update({"REPLICA_ID": str(replica + 1)})
-            data["env"].update({"REPLICA_COUNT": str(replicas)})
+            data["env"]["REPLICA_ID"] = str(replica + 1)
+            data["env"]["REPLICA_COUNT"] = str(replicas)
             log.debug("Replica Data: %s", data)
             payload = convert.dict_to_tuples(data)
             arguments.append({"url": self.server, "params": payload})
