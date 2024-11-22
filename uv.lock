@@ -1532,7 +1532,7 @@ wheels = [
 
 [[package]]
 name = "skaha"
-version = "1.4.3"
+version = "1.4.4"
 source = { virtual = "." }
 dependencies = [
     { name = "click" },

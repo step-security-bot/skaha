@@ -12,14 +12,18 @@ context.resources()
 ```
 
 ```python
-{
-    "defaultCores": 2,
-    "defaultCoresHeadless": 1,
-    "availableCores": [1, 2, 4, 8, 16],
-    "defaultRAM": 16,
-    "defaultRAMHeadless": 4,
-    "availableRAM": [1, 2, 4, 8, 16, 32, 64, 128, 192],
-    "availableGPUs": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ...],
+{'cores': {'default': 1,
+  'defaultRequest': 1,
+  'defaultLimit': 16,
+  'defaultHeadless': 1,
+  'options': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]},
+ 'memoryGB': {'default': 2,
+  'defaultRequest': 4,
+  'defaultLimit': 192,
+  'defaultHeadless': 4,
+  'options': [1,2,..., 192]},
+ 'gpus': {'options': [1,..., 8],
+  }
 }
 ```
 
