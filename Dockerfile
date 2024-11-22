@@ -8,7 +8,7 @@ WORKDIR /skaha
 RUN set -ex \
     && apk add --no-cache curl \
     && curl -LsSf https://astral.sh/uv/install.sh | sh \
-    && source $HOME/.cargo/env \
+    && source $HOME/.local/bin/env \
     && uv build
 
 FROM base AS production
