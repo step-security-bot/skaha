@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.5.0](https://github.com/shinybrar/skaha/compare/v1.4.4...v1.5.0) (2024-11-22)
+
+
+### Features
+
+* **context:** updates to context.resources api ([4d08876](https://github.com/shinybrar/skaha/commit/4d08876de0b49201ddef0b8c9ddc01f022fcf11f))
+
+
+### Bug Fixes
+
+* **docker:** fix for docker build due to uv path install changes ([00fd5de](https://github.com/shinybrar/skaha/commit/00fd5de260793d00b33d65216058c94854e73133))
+
+
+### Documentation
+
+* **style:** updates ([e886d77](https://github.com/shinybrar/skaha/commit/e886d77253d9b52f43bd5ab3d4c826b1d8a591c3))
+
 ## [1.4.4](https://github.com/shinybrar/skaha/compare/v1.4.3...v1.4.4) (2024-11-22)
 
 
